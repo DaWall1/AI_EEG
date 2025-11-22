@@ -28,7 +28,7 @@ print(df.head())
 print("\nColumns:", df.columns)
 
 
-# --- CLASS DISTRIBUTION PLOT ---
+# --- Diagrama distribuției claselor ---
 plt.figure(figsize=(6, 4))
 class_counts = df["Class"].value_counts()
 plt.bar(class_counts.index, class_counts.values, color=["#007acc", "#ff6347"])
@@ -83,4 +83,5 @@ plt.xlim(0, sampling_rate / 2)
 plt.legend()
 plt.tight_layout()
 plt.show()
+
 
