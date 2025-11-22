@@ -12,7 +12,7 @@ path = kagglehub.dataset_download("danizo/eeg-dataset-for-adhd")
 
 print("Path to dataset files:", path)
 
-# Find the first CSV file (dataset contains .csv files)
+# Se caută primul fișier CSV (Setul de date conține fișiere .csv )
 for file in os.listdir(path):
     if file.endswith(".csv"):
         data_path = os.path.join(path, file)
@@ -20,10 +20,10 @@ for file in os.listdir(path):
 
 print("Using dataset file:", data_path)
 
-# Load the data
+# Se încarcă datele
 df = pd.read_csv(data_path)
 
-# Display basic info
+
 print(df.head())
 print("\nColumns:", df.columns)
 
@@ -40,23 +40,23 @@ plt.tight_layout()
 plt.show()
 
 
-# --- EEG SIGNAL PLOT ---
-# Select only EEG channels (exclude Class, ID)
+# --- Reprezentarea grafică a semnalului EEG ---
+# Se selectează doar canalele EEG  (se exclud Class, ID)
 channels = [col for col in df.columns if col not in ["Class", "ID"]]
 
-# Select a few seconds worth of data
-sampling_rate = 128  # Hz (given in dataset description)
+# Semnalul se va reprezenta pe un interval de trei secunde
+sampling_rate = 128  # Hz 
 duration_seconds = 3
 samples_to_plot = sampling_rate * duration_seconds
 
-# Pick one patient (e.g., first in dataset)
+# Se alege un pacient(e.g. primul din setul de date)
 subject_data = df[df["ID"] == df["ID"].iloc[0]]
 subject_data = subject_data[channels].head(samples_to_plot)
 
-# Plot a few EEG channels
+# Se reprezintă primele canale EEG
 plt.figure(figsize=(12, 6))
-for i, ch in enumerate(channels[:5]):  # Plot first 5 channels
-    plt.plot(subject_data[ch] + i * 100, label=ch)  # Offset for clarity
+for i, ch in enumerate(channels[:5]):  # Primele 5
+    plt.plot(subject_data[ch] + i * 100, label=ch)  # Offset pentru claritate
 
 plt.title(f"EEG Signals - First {duration_seconds} Seconds")
 plt.xlabel("Samples (time)")
@@ -67,12 +67,12 @@ plt.show()
 
 
 
-# --- POWER SPECTRAL DENSITY (Welch) ---
+# --- Densitatea specctrală de putere (Welch) ---
 plt.figure(figsize=(10, 6))
-nperseg = 256  # adjust if necessary (<= segment length)
+nperseg = 256  
 for ch in channels[:5]:
     sig = subject_data[ch].astype(float).values
-    # If the segment length is shorter than nperseg, welch will warn; adjust nperseg if needed.
+    # Dacă lungimea segmentului este mai scurtă decât nperseg, welch va atenționa; se va modifica valoarea nperseg dacă este necesar.
     f, Pxx = welch(sig, fs=sampling_rate, nperseg=min(nperseg, len(sig)))
     plt.semilogy(f, Pxx, label=ch)
 
@@ -83,3 +83,4 @@ plt.xlim(0, sampling_rate / 2)
 plt.legend()
 plt.tight_layout()
 plt.show()
+
